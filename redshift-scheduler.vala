@@ -5,6 +5,7 @@ namespace RedshiftScheduler {
 		private ITemperatureDeterminer temperature_determiner;
 		private ITemperatureSetter temperature_setter;
 		private ILogger logger;
+		private int? last_temperature_set;
 
 		public Application(ITemperatureDeterminer temperature_determiner, ITemperatureSetter temperature_setter, ILogger logger) {
 			this.temperature_determiner = temperature_determiner;
@@ -29,11 +30,14 @@ namespace RedshiftScheduler {
 			try {
 				int temperature = this.temperature_determiner.determine_temperature();
 
-				message("Temperature determined to be: %d", temperature);
-
-				this.temperature_setter.set_temperature(temperature);
-
-				message("Temperature set to: %d", temperature);
+				if (this.last_temperature_set != temperature) {
+					message("Temperature determined to be: %dK", temperature);
+					this.temperature_setter.set_temperature(temperature);
+					this.last_temperature_set = temperature;
+					message("Temperature set to: %dK", temperature);
+				} else {
+					message("Temperature remains the same as last time (%dK) - not doing anything", temperature);
+				}
 			} catch (TemperatureDeterminerError e) {
 				stderr.printf(e.message);
 			} catch (TemperatureSetterError e) {
