@@ -32,23 +32,26 @@ namespace RedshiftScheduler {
 
 			Rule? active_rule = rules.get_active(time);
 			if (active_rule == null) {
-				throw new TemperatureDeterminerError.GENERIC_FAILURE("Cannot determine active rule at: " + time.to_string());
+				//Don't fail. No rules for the given period means "maximum temperature".
+				active_rule = new Rule(Rule.TEMPERATURE_MAX, false, new Time(0, 0), new Time(23, 59));
+				message("Assuming rule %s", active_rule.to_string());
+			} else {
+				message("Using rule %s", active_rule.to_string());
 			}
 
-			message("Using rule %s", active_rule.to_string());
 
 			Rule? previous_rule = rules.get_previous(active_rule);
 			if (previous_rule == null) {
 				//Create a fake rule. The start/end times and the transient value are not important.
 				previous_rule = new Rule(Rule.TEMPERATURE_MAX, false, new Time(0, 0), new Time(0, 0));
 				warning(
-					"Cannot determine previous rule of: `%s` (one matching for the time period before it). Using `%s`.",
-					active_rule.to_string(),
-					previous_rule.to_string()
+					"Cannot determine previous rule of: `%s` (one matching for the time period before it)",
+					active_rule.to_string()
 				);
+				debug("Assuming previous rule %s", previous_rule.to_string());
+			} else {
+				debug("Previous rule %s", previous_rule.to_string());
 			}
-
-			debug("Previous rule %s", previous_rule.to_string());
 
 			return this.calculate_temperature_by_rules(previous_rule, active_rule, time);
 		}
