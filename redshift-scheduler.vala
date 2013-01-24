@@ -4,6 +4,7 @@ namespace RedshiftScheduler {
 
 		private ITemperatureDeterminer temperature_determiner;
 		private ITemperatureSetter temperature_setter;
+		private IPowerResumeDetector? power_resume_detector;
 		private ILogger logger;
 		private int? last_temperature_set;
 
@@ -11,6 +12,10 @@ namespace RedshiftScheduler {
 			this.temperature_determiner = temperature_determiner;
 			this.temperature_setter = temperature_setter;
 			this.logger = logger;
+		}
+
+		public void set_power_resume_detector(IPowerResumeDetector detector) {
+			this.power_resume_detector = detector;
 		}
 
 		public int run() {
@@ -22,6 +27,13 @@ namespace RedshiftScheduler {
 				this.change_temperature();
 				return true;
 			});
+
+			if (this.power_resume_detector != null) {
+				this.power_resume_detector.resuming.connect(() => {
+					debug("Activating after a system power resume");
+					this.change_temperature();
+				});
+			}
 
 			return 0;
 		}
@@ -63,6 +75,7 @@ namespace RedshiftScheduler {
 		ILogger logger = new StandardLogger(debug);
 
 		Application app = new Application(temperature_determiner, new RedshiftTemperatureSetter(), logger);
+		app.set_power_resume_detector(new DBusPowerResumeDetector());
 		app.run();
 
 		new MainLoop().run();
