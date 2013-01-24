@@ -5,12 +5,15 @@ namespace RedshiftScheduler {
 		private ITemperatureDeterminer temperature_determiner;
 		private ITemperatureSetter temperature_setter;
 		private IPowerResumeDetector? power_resume_detector;
-		private ILogger logger;
+		private ILogger? logger;
 		private int? last_temperature_set;
 
-		public Application(ITemperatureDeterminer temperature_determiner, ITemperatureSetter temperature_setter, ILogger logger) {
+		public Application(ITemperatureDeterminer temperature_determiner, ITemperatureSetter temperature_setter) {
 			this.temperature_determiner = temperature_determiner;
 			this.temperature_setter = temperature_setter;
+		}
+
+		public void set_logger(ILogger logger) {
 			this.logger = logger;
 		}
 
@@ -19,7 +22,9 @@ namespace RedshiftScheduler {
 		}
 
 		public int run() {
-			this.logger.install();
+			if (this.logger != null) {
+				this.logger.install();
+			}
 
 			this.change_temperature();
 
@@ -72,10 +77,9 @@ namespace RedshiftScheduler {
 		IRulesProvider rules_provider = new LiveFileRulesProvider(new FileRulesProvider(definitions_file));
 		ITemperatureDeterminer temperature_determiner = new RulesBasedTemperatureDeterminer(rules_provider);
 
-		ILogger logger = new StandardLogger(debug);
-
-		Application app = new Application(temperature_determiner, new RedshiftTemperatureSetter(), logger);
+		Application app = new Application(temperature_determiner, new RedshiftTemperatureSetter());
 		app.set_power_resume_detector(new DBusPowerResumeDetector());
+		app.set_logger(new StandardLogger(debug));
 		app.run();
 
 		new MainLoop().run();
