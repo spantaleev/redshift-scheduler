@@ -108,7 +108,7 @@ namespace RedshiftScheduler {
 					return null;
 				});
 			} catch (Error e) {
-				critical("Thread error\n");
+				critical("Thread error");
 			}
 		}
 
