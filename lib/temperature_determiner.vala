@@ -34,11 +34,10 @@ namespace RedshiftScheduler {
 			if (active_rule == null) {
 				//Don't fail. No rules for the given period means "maximum temperature".
 				active_rule = new Rule(Rule.TEMPERATURE_MAX, false, new Time(0, 0), new Time(23, 59));
-				message("Assuming rule %s", active_rule.to_string());
+				message("No rules found. Using a default rule %s", active_rule.to_string());
 			} else {
 				message("Using rule %s", active_rule.to_string());
 			}
-
 
 			Rule? previous_rule = this.determine_previous_rule(rules, active_rule);
 			if (previous_rule == null) {
@@ -53,7 +52,7 @@ namespace RedshiftScheduler {
 				debug("Previous rule %s", previous_rule.to_string());
 			}
 
-			return this.calculate_temperature_by_rules(previous_rule, active_rule, time);
+			return this.calculate_temperature_by_rule(active_rule, time, previous_rule.temperature);
 		}
 
 		private Rule? determine_active_rule(Rule[] rules, Time time) {
@@ -74,19 +73,18 @@ namespace RedshiftScheduler {
 			return this.determine_active_rule(rules, time);
 		}
 
-		private int calculate_temperature_by_rules(Rule previous, Rule current, Time now) {
+		private int calculate_temperature_by_rule(Rule current, Time now, int temperature_start) {
 			if (! current.transient) {
 				//The current period is not transient, meaning the temperature is constant
 				//throughout the whole period, without gradual changes.
 				return current.temperature;
 			}
 
-			//For transient periods, we use the previous rule to figure out the starting temperature.
-			//The current rule gives us the end temperature.
-			//We're somewhere in the current period, so the temperature we need to set is somewhere
-			//between those two. The longer the period, the more gradually the temperature increases with time.
+			//For transient periods, the current temperature is somewhere between the
+			//start and end temperatures (depending on the time).
+			//The longer the period, the more gradually the temperature changes with time.
 
-			int temp_difference = (previous.temperature - current.temperature).abs();
+			int temp_difference = (temperature_start - current.temperature).abs();
 
 			int minutes_into_the_period = now.to_minutes() - current.start.to_minutes();
 
@@ -94,11 +92,11 @@ namespace RedshiftScheduler {
 
 			int diff = (int)(step * (double)minutes_into_the_period);
 
-			if (previous.temperature > current.temperature) {
-				return previous.temperature - diff;
+			if (current.temperature < temperature_start) {
+				return temperature_start - diff;
 			}
 
-			return previous.temperature + diff;
+			return temperature_start + diff;
 		}
 
 	}
