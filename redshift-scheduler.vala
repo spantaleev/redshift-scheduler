@@ -28,6 +28,11 @@ namespace RedshiftScheduler {
 
 			this.change_temperature();
 
+			this.temperature_determiner.temperature_outdated.connect(() => {
+				debug("Activating, because of an outdated temperature value");
+				this.change_temperature();
+			});
+
 			Timeout.add(60000, () => {
 				this.change_temperature();
 				return true;

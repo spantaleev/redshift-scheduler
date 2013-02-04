@@ -6,6 +6,12 @@ namespace RedshiftScheduler {
 
 	interface ITemperatureDeterminer : GLib.Object {
 		public abstract int determine_temperature() throws TemperatureDeterminerError;
+
+		/**
+		 * Signal to notify determiner consumers that the previously returned
+		 * by determine_temperature() value is potentially outdated now.
+		 */
+		public signal void temperature_outdated();
 	}
 
 	class RulesBasedTemperatureDeterminer : GLib.Object, ITemperatureDeterminer {
@@ -14,6 +20,10 @@ namespace RedshiftScheduler {
 
 		public RulesBasedTemperatureDeterminer(IRulesProvider rules_provider) {
 			this.rules_provider = rules_provider;
+
+			rules_provider.rules_outdated.connect(() => {
+				this.temperature_outdated();
+			});
 		}
 
 		public int determine_temperature() throws TemperatureDeterminerError {

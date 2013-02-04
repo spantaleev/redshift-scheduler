@@ -8,6 +8,11 @@ namespace RedshiftScheduler {
 
 	interface IRulesProvider : GLib.Object {
 		public abstract Rule[] get_rules() throws RulesError;
+
+		/**
+		 * Signal to notify rules consumers that new rules might be available.
+		 */
+		public signal void rules_outdated();
 	}
 
 	class FileRulesProvider : GLib.Object, IRulesProvider {
@@ -96,6 +101,8 @@ namespace RedshiftScheduler {
 
 									message("Rules reloaded");
 									dump_rules(rules);
+
+									this.rules_outdated();
 								} catch (RulesError e) {
 									warning("Failed while reloading rules: %s", e.message);
 								}
