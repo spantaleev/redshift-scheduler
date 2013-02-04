@@ -18,7 +18,7 @@ namespace RedshiftScheduler {
 		IRulesProvider rules_provider = new LiveFileRulesProvider(new FileRulesProvider(rules_file));
 		ITemperatureDeterminer temperature_determiner = new RulesBasedTemperatureDeterminer(rules_provider);
 
-		Application app = new Application(temperature_determiner, new RedshiftTemperatureSetter());
+		Application app = new Application(config, temperature_determiner, new RedshiftTemperatureSetter());
 		app.set_power_resume_detector(new DBusPowerResumeDetector());
 		app.set_logger(new StandardLogger(config.debug_mode));
 		app.run();

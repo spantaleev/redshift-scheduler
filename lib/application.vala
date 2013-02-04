@@ -2,13 +2,15 @@ namespace RedshiftScheduler {
 
 	class Application {
 
+		private ApplicationConfig config;
 		private ITemperatureDeterminer temperature_determiner;
 		private ITemperatureSetter temperature_setter;
 		private IPowerResumeDetector? power_resume_detector;
 		private ILogger? logger;
 		private int? last_temperature_set;
 
-		public Application(ITemperatureDeterminer temperature_determiner, ITemperatureSetter temperature_setter) {
+		public Application(ApplicationConfig config, ITemperatureDeterminer temperature_determiner, ITemperatureSetter temperature_setter) {
+			this.config = config;
 			this.temperature_determiner = temperature_determiner;
 			this.temperature_setter = temperature_setter;
 		}
@@ -33,7 +35,7 @@ namespace RedshiftScheduler {
 				this.change_temperature();
 			});
 
-			Timeout.add(60000, () => {
+			Timeout.add(this.config.temperature_change_interval * 60 * 1000, () => {
 				this.change_temperature();
 				return true;
 			});
