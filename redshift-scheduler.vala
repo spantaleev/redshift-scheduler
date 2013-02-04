@@ -10,7 +10,7 @@ namespace RedshiftScheduler {
 		}
 
 		if (config.show_version) {
-			stdout.printf("redshift-scheduler %s\n", ApplicationConfig.version);
+			stdout.printf("redshift-scheduler %s\n", Application.VERSION);
 			return;
 		}
 

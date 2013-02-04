@@ -2,6 +2,8 @@ namespace RedshiftScheduler {
 
 	class Application {
 
+		public const string VERSION = "dev";
+
 		private ApplicationConfig config;
 		private ITemperatureDeterminer temperature_determiner;
 		private ITemperatureSetter temperature_setter;

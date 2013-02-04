@@ -6,8 +6,6 @@ namespace RedshiftScheduler {
 
 	class ApplicationConfig {
 
-		public const string version = "dev";
-
 		public string rules_path;
 		public int temperature_change_interval;
 		public bool debug_mode;
