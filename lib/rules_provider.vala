@@ -7,7 +7,7 @@ namespace RedshiftScheduler {
 	}
 
 	interface IRulesProvider : GLib.Object {
-		public abstract RulesCollection get_rules() throws RulesError;
+		public abstract Rule[] get_rules() throws RulesError;
 	}
 
 	class FileRulesProvider : GLib.Object, IRulesProvider {
@@ -18,11 +18,11 @@ namespace RedshiftScheduler {
 			this.file = file;
 		}
 
-		public RulesCollection get_rules() throws RulesError {
+		public Rule[] get_rules() throws RulesError {
 			return FileRulesProvider.read_rules_from_file(this.file);
 		}
 
-		private static RulesCollection read_rules_from_file(File file) throws RulesError {
+		private static Rule[] read_rules_from_file(File file) throws RulesError {
 			Rule[] rules = {};
 
 			MatchInfo match;
@@ -64,7 +64,7 @@ namespace RedshiftScheduler {
 				throw new RulesError.GENERIC_FAILURE(e.message);
 			}
 
-			return new RulesCollection(rules);
+			return rules;
 		}
 
 	}
@@ -72,7 +72,7 @@ namespace RedshiftScheduler {
 	class LiveFileRulesProvider : GLib.Object, IRulesProvider {
 
 		private FileRulesProvider provider;
-		private RulesCollection rules;
+		private Rule[] rules;
 		private bool rules_loaded = false;
 
 		public LiveFileRulesProvider(FileRulesProvider provider) {
@@ -88,7 +88,7 @@ namespace RedshiftScheduler {
 						monitor.changed.connect((src, dest, event) => {
 							if (event == FileMonitorEvent.CREATED) {
 								try {
-									RulesCollection rules = this.provider.get_rules();
+									Rule[] rules = this.provider.get_rules();
 
 									lock(this.rules) {
 										this.rules = rules;
@@ -112,7 +112,7 @@ namespace RedshiftScheduler {
 			}
 		}
 
-		public RulesCollection get_rules() throws RulesError {
+		public Rule[] get_rules() throws RulesError {
 			if (! this.rules_loaded) {
 				lock(this.rules) {
 					this.rules = this.provider.get_rules();

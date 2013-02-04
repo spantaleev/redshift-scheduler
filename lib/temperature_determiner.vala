@@ -20,7 +20,7 @@ namespace RedshiftScheduler {
 			DateTime dt_now = new DateTime.now_local();
 			Time time = new Time(dt_now.get_hour(), dt_now.get_minute());
 
-			RulesCollection rules;
+			Rule[] rules;
 
 			try {
 				rules = this.rules_provider.get_rules();
@@ -30,7 +30,7 @@ namespace RedshiftScheduler {
 
 			message("Looking for a rule applying at: %s", time.to_string());
 
-			Rule? active_rule = rules.get_active(time);
+			Rule? active_rule = this.determine_active_rule(rules, time);
 			if (active_rule == null) {
 				//Don't fail. No rules for the given period means "maximum temperature".
 				active_rule = new Rule(Rule.TEMPERATURE_MAX, false, new Time(0, 0), new Time(23, 59));
@@ -40,7 +40,7 @@ namespace RedshiftScheduler {
 			}
 
 
-			Rule? previous_rule = rules.get_previous(active_rule);
+			Rule? previous_rule = this.determine_previous_rule(rules, active_rule);
 			if (previous_rule == null) {
 				//Create a fake rule. The start/end times and the transient value are not important.
 				previous_rule = new Rule(Rule.TEMPERATURE_MAX, false, new Time(0, 0), new Time(0, 0));
@@ -54,6 +54,19 @@ namespace RedshiftScheduler {
 			}
 
 			return this.calculate_temperature_by_rules(previous_rule, active_rule, time);
+		}
+
+		private Rule? determine_active_rule(Rule[] rules, Time time) {
+			foreach (Rule rule in rules) {
+				if (rule.applies_at_time(time)) {
+					return rule;
+				}
+			}
+			return null;
+		}
+
+		private Rule? determine_previous_rule(Rule[] rules, Rule current) {
+			return this.determine_active_rule(rules, Time.create_substracted_with_minutes(current.start, 1));
 		}
 
 		private int calculate_temperature_by_rules(Rule previous, Rule current, Time now) {

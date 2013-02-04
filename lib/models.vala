@@ -1,32 +1,5 @@
 namespace RedshiftScheduler {
 
-	class RulesCollection {
-
-		private Rule[] rules;
-
-		public RulesCollection(Rule[] rules = {}) {
-			this.rules = rules;
-		}
-
-		public Rule? get_active(Time time) {
-			foreach (Rule rule in this.rules) {
-				if (rule.applies_at_time(time)) {
-					return rule;
-				}
-			}
-			return null;
-		}
-
-		public Rule? get_previous(Rule current) {
-			return this.get_active(Time.create_substracted_with_minutes(current.start, 1));
-		}
-
-		public Rule[] get_all() {
-			return this.rules;
-		}
-
-	}
-
 	class Rule {
 
 		public const int TEMPERATURE_MAX = 6500;
