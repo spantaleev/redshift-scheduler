@@ -65,8 +65,13 @@ namespace RedshiftScheduler {
 			return null;
 		}
 
+		/**
+		 * Returns the rule that was in effect right before (1 minute before)
+		 * the one given.
+		 */
 		private Rule? determine_previous_rule(Rule[] rules, Rule current) {
-			return this.determine_active_rule(rules, Time.create_substracted_with_minutes(current.start, 1));
+			Time time = new Time.from_minutes(current.start.to_minutes() - 1);
+			return this.determine_active_rule(rules, time);
 		}
 
 		private int calculate_temperature_by_rules(Rule previous, Rule current, Time now) {

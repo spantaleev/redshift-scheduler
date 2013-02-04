@@ -53,7 +53,8 @@ namespace RedshiftScheduler {
 
 		public Time.from_minutes(int minutes) {
 			if (minutes < 0) {
-				minutes = (23 * 60) + 60 + minutes;
+				//Creating from "negative minutes" is supported. (`-10` minutes means 23:50)
+				minutes = (24 * 60) + minutes;
 			}
 
 			this.hour = (minutes / 60);
@@ -66,13 +67,6 @@ namespace RedshiftScheduler {
 
 		public string to_string() {
 			return "%02d:%02d".printf(this.hour, this.minute);
-		}
-
-		public static Time create_substracted_with_minutes(Time time, int minutes_to_substract) {
-			int total_minutes = time.hour * 60 + time.minute;
-			int remaining_minutes = total_minutes - minutes_to_substract;
-
-			return new Time.from_minutes(remaining_minutes);
 		}
 
 	}
