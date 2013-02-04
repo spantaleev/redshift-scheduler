@@ -20,14 +20,11 @@ namespace RedshiftScheduler {
 			Time start = this.start;
 			Time end = this.end;
 
-			if (
-					(start.hour < time.hour || (start.hour == time.hour && time.minute >= start.minute))
-					&&
-					(time.hour < end.hour || (end.hour == time.hour && time.minute <= end.minute))
-				) {
-				return true;
-			}
-			return false;
+			return (
+				(start.hour < time.hour || (start.hour == time.hour && time.minute >= start.minute))
+				&&
+				(time.hour < end.hour || (end.hour == time.hour && time.minute <= end.minute))
+			);
 		}
 
 		public int get_length_minutes() {
