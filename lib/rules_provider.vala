@@ -34,7 +34,7 @@ namespace RedshiftScheduler {
 			Regex ruleRegex;
 
 			try {
-				ruleRegex = new Regex("^([0-9]+):([0-9]+) (--|->) ([0-9]+):([0-9]+) \\| ([0-9]+)K?$");
+				ruleRegex = new Regex("^([0-9]+):([0-9]+) (--|->) ([0-9]+):([0-9]+) \\| ([0-9]+)K?");
 			} catch (RegexError e) {
 				throw new RulesError.GENERIC_FAILURE("Cannot create regex.");
 			}
@@ -47,7 +47,8 @@ namespace RedshiftScheduler {
 				var dis = new DataInputStream(file.read());
 				string line;
 				while ((line = dis.read_line(null)) != null) {
-					if (line == "") {
+					if (line == "" || line.has_prefix("#")) {
+						//Ignore empty or comment lines
 						continue;
 					}
 
