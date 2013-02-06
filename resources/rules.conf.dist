@@ -1,0 +1,31 @@
+# Default rules file provided by redshift-scheduler.
+#
+# Each line is a rule definition and has the following parts:
+#	1. Start time (hour:minute)
+#	2. Type of transition ("--" or "->") - explained below
+#	3. End time (hour:minute) - could wrap around into the next day
+#	4. Screen temperature (between 1000K and 6500K)
+#
+# Transition types:
+#	"--" means "constant temperature" throughout the whole period.
+#	"->" means "gradual temperature change"
+#
+#	Example:
+#		09:30 -- 17:00 | 6500K
+#		17:00 -> 19:00 | 5500K
+#		19:00 -> 21:00 | 4500K
+#	From 09:30 to 17:00 the temperature will be exactly 6500K.
+#	From 17:00 to 19:00 the temperature will gradually decrease from 6500K to 5500K (~8K/minute).
+#	From 19:00 to 21:00 the temperature will gradually decrease from 5500K to 4500K (~8K/minute).
+
+
+07:00 -> 08:00 | 4500K
+08:00 -> 09:00 | 6200K
+09:00 -> 09:30 | 6500K
+09:30 -- 17:00 | 6500K
+17:00 -> 19:00 | 5500K
+19:00 -> 21:00 | 4500K
+21:00 -> 22:00 | 4200K
+22:00 -> 01:00 | 3600K
+01:00 -> 02:00 | 3400K
+02:00 -- 07:00 | 3400K
