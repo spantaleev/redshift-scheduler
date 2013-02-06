@@ -46,21 +46,27 @@ namespace RedshiftScheduler {
 			try {
 				var dis = new DataInputStream(file.read());
 				string line;
-				// Read lines until end of file (null) is reached
-				while ((line = dis.read_line (null)) != null) {
-					if (ruleRegex.match(line, RegexMatchFlags.NOTEMPTY, out match)) {
-						Time time_start = new Time(int.parse(match.fetch(1)), int.parse(match.fetch(2)));
-						bool transient = (match.fetch(3) == "->");
-						Time time_end = new Time(int.parse(match.fetch(4)), int.parse(match.fetch(5)));
-						int temperature = int.parse(match.fetch(6));
+				while ((line = dis.read_line(null)) != null) {
+					if (line == "") {
+						continue;
+					}
 
-						if (time_start.hour > time_end.hour) {
-							//Wraps around into a new day - let's split it into 2 rules
-							rules += new Rule(temperature, transient, time_start, new Time(23, 59));
-							rules += new Rule(temperature, transient, new Time(0, 0), time_end);
-						} else {
-							rules += new Rule(temperature, transient, time_start, time_end);
-						}
+					if (!ruleRegex.match(line, RegexMatchFlags.NOTEMPTY, out match)) {
+						warning("The line `%s` contains an invalid rule (bad syntax?).", line);
+						continue;
+					}
+
+					Time time_start = new Time(int.parse(match.fetch(1)), int.parse(match.fetch(2)));
+					bool transient = (match.fetch(3) == "->");
+					Time time_end = new Time(int.parse(match.fetch(4)), int.parse(match.fetch(5)));
+					int temperature = int.parse(match.fetch(6));
+
+					if (time_start.hour > time_end.hour) {
+						//Wraps around into a new day - let's split it into 2 rules
+						rules += new Rule(temperature, transient, time_start, new Time(23, 59));
+						rules += new Rule(temperature, transient, new Time(0, 0), time_end);
+					} else {
+						rules += new Rule(temperature, transient, time_start, time_end);
 					}
 				}
 			} catch (IOError e) {
