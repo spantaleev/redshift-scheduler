@@ -31,4 +31,32 @@ namespace RedshiftScheduler {
 		}
 	}
 
+	bool create_file_from_template(File file, string template_file_name) {
+		string[] data_dirs = {GLib.Environment.get_user_data_dir()};
+		foreach (string d in GLib.Environment.get_system_data_dirs()) {
+			data_dirs += d;
+		}
+
+		foreach (string data_path in data_dirs) {
+			string template_file_path = Path.build_path("/", data_path, "/redshift-scheduler/", template_file_name);
+
+			debug("Looking for file: %s", template_file_path);
+
+			File template = File.new_for_path(template_file_path);
+			if (!template.query_exists()) {
+				continue;
+			}
+
+			try {
+				debug("Copying `%s` to `%s`", template_file_path, file.get_path());
+				return template.copy(file, FileCopyFlags.NONE);
+			} catch (Error e) {
+				debug(e.message);
+				return false;
+			}
+		}
+		return false;
+	}
+
+
 }

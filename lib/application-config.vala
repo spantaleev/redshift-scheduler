@@ -18,8 +18,8 @@ namespace RedshiftScheduler {
 				throw new ApplicationConfigError.GENERIC_FAILURE(e.message);
 			}
 
-			if (this.rules_path == null && !this.show_version) {
-				throw new ApplicationConfigError.GENERIC_FAILURE("A rules file needs to be specified.");
+			if (this.rules_path == null) {
+				this.rules_path = GLib.Environment.get_user_config_dir() + "/redshift-scheduler/rules.conf";
 			}
 
 			if (this.temperature_change_interval < 1) {
@@ -37,7 +37,7 @@ namespace RedshiftScheduler {
 		private static bool show_version;
 
 		const OptionEntry[] options = {
-			{ "rules-path", 'r', 0, OptionArg.FILENAME, ref rules_path, "Path to rules file", null },
+			{ "rules-path", 'r', 0, OptionArg.FILENAME, ref rules_path, "Path to rules file", "$XDG_CONFIG_HOME/redshift-scheduler/rules.conf" },
 			{ "temperature-change-interval", 'i', 0, OptionArg.INT64, ref temperature_change_interval, "How often and gradually to change the temperature (minutes)", "1" },
 			{ "debug", 'd', 0, OptionArg.NONE, ref debug_mode, "Enable debug mode", null },
 			{ "version", 'v', 0, OptionArg.NONE, ref show_version, "Show version number", null },

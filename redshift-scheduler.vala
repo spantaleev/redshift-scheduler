@@ -18,6 +18,15 @@ namespace RedshiftScheduler {
 		}
 
 		File rules_file = File.new_for_path(config.rules_path);
+
+		if (!rules_file.query_exists()) {
+			if (!create_file_from_template(rules_file, "rules.conf.dist")) {
+				error("Could not create default rules file. The program is most likely installed incorrectly.");
+			}
+
+			message("Created a default rules file in `%s` - you can modify it to your liking now.", config.rules_path);
+		}
+
 		IRulesProvider rules_provider = new LiveFileRulesProvider(new FileRulesProvider(rules_file));
 		ITemperatureDeterminer temperature_determiner = new RulesBasedTemperatureDeterminer(rules_provider);
 
