@@ -8,7 +8,6 @@ namespace RedshiftScheduler {
 		private ITemperatureDeterminer temperature_determiner;
 		private ITemperatureSetter temperature_setter;
 		private IPowerResumeDetector? power_resume_detector;
-		private ILogger? logger;
 		private int? last_temperature_set;
 
 		public Application(ApplicationConfig config, ITemperatureDeterminer temperature_determiner, ITemperatureSetter temperature_setter) {
@@ -17,19 +16,11 @@ namespace RedshiftScheduler {
 			this.temperature_setter = temperature_setter;
 		}
 
-		public void set_logger(ILogger logger) {
-			this.logger = logger;
-		}
-
 		public void set_power_resume_detector(IPowerResumeDetector detector) {
 			this.power_resume_detector = detector;
 		}
 
 		public int run() {
-			if (this.logger != null) {
-				this.logger.install();
-			}
-
 			this.change_temperature();
 
 			this.temperature_determiner.temperature_outdated.connect(() => {

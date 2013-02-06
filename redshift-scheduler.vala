@@ -9,6 +9,9 @@ namespace RedshiftScheduler {
 			return;
 		}
 
+		ILogger logger = new StandardLogger(config.debug_mode);
+		logger.install();
+
 		if (config.show_version) {
 			stdout.printf("redshift-scheduler %s\n", Application.VERSION);
 			return;
@@ -20,7 +23,6 @@ namespace RedshiftScheduler {
 
 		Application app = new Application(config, temperature_determiner, new RedshiftTemperatureSetter());
 		app.set_power_resume_detector(new DBusPowerResumeDetector());
-		app.set_logger(new StandardLogger(config.debug_mode));
 		app.run();
 
 		new MainLoop().run();
