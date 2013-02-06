@@ -17,7 +17,8 @@ namespace RedshiftScheduler {
 				if (!this.debug && flags == LogLevelFlags.LEVEL_DEBUG) {
 					return;
 				}
-				stdout.printf("%s\n",this.format_message(message));
+				string message_type = flags.to_string().replace("G_LOG_LEVEL_", "").down();
+				stdout.printf("[%s] %s\n", message_type, this.format_message(message));
 			});
 		}
 
