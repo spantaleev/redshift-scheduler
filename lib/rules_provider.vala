@@ -61,6 +61,22 @@ namespace RedshiftScheduler {
 					Time time_end = new Time(int.parse(match.fetch(4)), int.parse(match.fetch(5)));
 					int temperature = int.parse(match.fetch(6));
 
+					if (time_start == null || time_end == null) {
+						//Happens when Time object construction fails (`requires` clauses not satisfied).
+						warning("The time period in rule `%s` is invalid. Skipping rule.", line);
+						continue;
+					}
+
+					if (temperature < Rule.TEMPERATURE_MIN) {
+						warning("The rule `%s` specifies a temperature that is too low. Using %dK instead.", line, Rule.TEMPERATURE_MIN);
+						temperature = Rule.TEMPERATURE_MIN;
+					}
+
+					if (Rule.TEMPERATURE_MAX < temperature) {
+						warning("The rule `%s` specifies a temperature that is too high. Using %dK instead.", line, Rule.TEMPERATURE_MAX);
+						temperature = Rule.TEMPERATURE_MAX;
+					}
+
 					if (time_start.hour > time_end.hour) {
 						//Wraps around into a new day - let's split it into 2 rules
 						rules += new Rule(temperature, transient, time_start, new Time(23, 59));
