@@ -78,13 +78,7 @@ namespace RedshiftScheduler {
 						temperature = Rule.TEMPERATURE_MAX;
 					}
 
-					if (time_start.hour > time_end.hour) {
-						//Wraps around into a new day - let's split it into 2 rules
-						rules += new Rule(temperature, transient, time_start, new Time(23, 59));
-						rules += new Rule(temperature, transient, new Time(0, 0), time_end);
-					} else {
-						rules += new Rule(temperature, transient, time_start, time_end);
-					}
+					rules += new Rule(temperature, transient, time_start, time_end);
 				}
 			} catch (IOError e) {
 				throw new RulesError.FILE_READ(e.message);

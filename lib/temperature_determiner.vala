@@ -96,7 +96,9 @@ namespace RedshiftScheduler {
 
 			int temp_difference = (temperature_start - current.temperature).abs();
 
-			int minutes_into_the_period = now.to_minutes() - current.start.to_minutes();
+			int minutes_into_the_period = current.get_minutes_into(now);
+
+			debug("%d minutes into the period", minutes_into_the_period);
 
 			double step = (double)temp_difference / current.get_length_minutes();
 

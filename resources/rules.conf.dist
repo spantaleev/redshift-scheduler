@@ -1,9 +1,9 @@
 # Default rules file provided by redshift-scheduler.
 #
 # Each line is a rule definition and has the following parts:
-#	1. Start time (hour:minute)
+#	1. Start time (hour:minute) - inclusive
 #	2. Type of transition ("--" or "->") - explained below
-#	3. End time (hour:minute) - could wrap around into the next day
+#	3. End time (hour:minute) - not inclusive. Could wrap around into the next day.
 #	4. Screen temperature (between 1000K and 6500K)
 #
 # Transition types:
