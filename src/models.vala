@@ -11,9 +11,6 @@ namespace RedshiftScheduler {
 	 */
 	class Rule {
 
-		public const int TEMPERATURE_MAX = 6500;
-		public const int TEMPERATURE_MIN = 1000;
-
 		public int temperature { get; private set; }
 		public bool transient { get; private set; }
 		public Time start { get; private set; }

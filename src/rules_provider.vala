@@ -68,14 +68,14 @@ namespace RedshiftScheduler {
 						continue;
 					}
 
-					if (temperature < Rule.TEMPERATURE_MIN) {
-						warning("The rule `%s` specifies a temperature that is too low. Using %dK instead.", line, Rule.TEMPERATURE_MIN);
-						temperature = Rule.TEMPERATURE_MIN;
+					if (temperature < TEMPERATURE_MIN) {
+						warning("The rule `%s` specifies a temperature that is too low. Using %dK instead.", line, TEMPERATURE_MIN);
+						temperature = TEMPERATURE_MIN;
 					}
 
-					if (Rule.TEMPERATURE_MAX < temperature) {
-						warning("The rule `%s` specifies a temperature that is too high. Using %dK instead.", line, Rule.TEMPERATURE_MAX);
-						temperature = Rule.TEMPERATURE_MAX;
+					if (TEMPERATURE_MAX < temperature) {
+						warning("The rule `%s` specifies a temperature that is too high. Using %dK instead.", line, TEMPERATURE_MAX);
+						temperature = TEMPERATURE_MAX;
 					}
 
 					rules += new Rule(temperature, transient, time_start, time_end);

@@ -43,7 +43,7 @@ namespace RedshiftScheduler {
 			Rule? active_rule = this.determine_active_rule(rules, time);
 			if (active_rule == null) {
 				//Don't fail. No rules for the given period means "maximum temperature".
-				active_rule = new Rule(Rule.TEMPERATURE_MAX, false, new Time(0, 0), new Time(23, 59));
+				active_rule = new Rule(TEMPERATURE_MAX, false, new Time(0, 0), new Time(23, 59));
 				message("No rules found. Using a default rule %s", active_rule.to_string());
 			} else {
 				message("Using rule %s", active_rule.to_string());
@@ -52,7 +52,7 @@ namespace RedshiftScheduler {
 			Rule? previous_rule = this.determine_previous_rule(rules, active_rule);
 			if (previous_rule == null) {
 				//Create a fake rule. The start/end times and the transient value are not important.
-				previous_rule = new Rule(Rule.TEMPERATURE_MAX, false, new Time(0, 0), new Time(0, 0));
+				previous_rule = new Rule(TEMPERATURE_MAX, false, new Time(0, 0), new Time(0, 0));
 				warning(
 					"Cannot determine previous rule of: `%s` (one matching for the time period before it)",
 					active_rule.to_string()
