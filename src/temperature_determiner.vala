@@ -42,27 +42,29 @@ namespace RedshiftScheduler {
 
 			Rule? active_rule = this.determine_active_rule(rules, time);
 			if (active_rule == null) {
-				//Don't fail. No rules for the given period means "maximum temperature".
-				active_rule = new Rule(TEMPERATURE_MAX, false, new Time(0, 0), new Time(23, 59));
-				message("No rules found. Using a default rule %s", active_rule.to_string());
-			} else {
-				message("Using rule %s", active_rule.to_string());
+				message("No rule found. Using maximum temperature (%dK)", TEMPERATURE_MAX);
+				return TEMPERATURE_MAX;
+			}
+
+			message("Using rule %s", active_rule.to_string());
+
+			if (!active_rule.transient) {
+				//The current period is not transient, meaning the temperature is constant
+				//throughout the whole period, without gradual changes.
+				return active_rule.temperature;
 			}
 
 			Rule? previous_rule = this.determine_previous_rule(rules, active_rule);
+			int start_temperature;
 			if (previous_rule == null) {
-				//Create a fake rule. The start/end times and the transient value are not important.
-				previous_rule = new Rule(TEMPERATURE_MAX, false, new Time(0, 0), new Time(0, 0));
-				warning(
-					"Cannot determine previous rule of: `%s` (one matching for the time period before it)",
-					active_rule.to_string()
-				);
-				debug("Assuming previous rule %s", previous_rule.to_string());
+				start_temperature = TEMPERATURE_MAX;
+				warning("No previous rule of: `%s`. Assuming previous temperature: %dK", active_rule.to_string(), TEMPERATURE_MAX);
 			} else {
-				debug("Previous rule %s", previous_rule.to_string());
+				start_temperature = previous_rule.temperature;
+				debug("Previous rule `%s`, with temperature: %dK", previous_rule.to_string(), start_temperature);
 			}
 
-			return this.calculate_temperature_by_rule(active_rule, time, previous_rule.temperature);
+			return TransientRuleTemperatureCalculator.calculate_temperature_by_rule(active_rule, time, start_temperature);
 		}
 
 		private Rule? determine_active_rule(Rule[] rules, Time time) {
@@ -83,13 +85,11 @@ namespace RedshiftScheduler {
 			return this.determine_active_rule(rules, time);
 		}
 
-		private int calculate_temperature_by_rule(Rule current, Time now, int temperature_start) {
-			if (! current.transient) {
-				//The current period is not transient, meaning the temperature is constant
-				//throughout the whole period, without gradual changes.
-				return current.temperature;
-			}
+	}
 
+	private class TransientRuleTemperatureCalculator {
+
+		public static int calculate_temperature_by_rule(Rule current, Time now, int temperature_start) {
 			//For transient periods, the current temperature is somewhere between the
 			//start and end temperatures (depending on the time).
 			//The longer the period, the more gradually the temperature changes with time.

@@ -33,7 +33,7 @@ namespace RedshiftScheduler {
 			return false;
 		}
 
-		public int get_length_minutes() {
+		public int get_length_minutes() ensures (result >= 1) {
 			int total_minutes = 0;
 			foreach (DayConfinedRule r in this.get_day_confined_rules()) {
 				total_minutes += r.get_length_minutes();
@@ -137,7 +137,7 @@ namespace RedshiftScheduler {
 			return (is_after_start && is_before_end);
 		}
 
-		public new int get_length_minutes() {
+		public new int get_length_minutes() ensures (result >= 1) {
 			int length = this.end.to_minutes() - this.start.to_minutes();
 
 			if (this.start.to_string() == this.end.to_string() || this.end_is_inclusive) {
