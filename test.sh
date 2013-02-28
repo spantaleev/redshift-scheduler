@@ -1,9 +1,11 @@
 #!/bin/bash
 
-valac -X -w --disable-warnings --pkg gio-2.0 --pkg posix --target-glib=2.34 -o tests/tests-runner src/*.vala tests/*.vala
+mkdir build -p
+
+valac -X -w --disable-warnings --pkg gio-2.0 --pkg posix --target-glib=2.34 -o build/tests-runner src/*.vala tests/*.vala
 
 if [  $? -eq 0 ]; then
-	tests/tests-runner
+	build/tests-runner
 	exit $?
 fi
 

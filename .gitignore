@@ -1,3 +1,2 @@
 *.c
-redshift-scheduler
-tests/tests-runner
+build/
