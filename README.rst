@@ -82,7 +82,7 @@ For distro packagers
 
 A package would:
     - build the executable and stage it for copying to /usr/bin/ or some other location
-    - stage ``resources/rules.conf.dist`` (the default config) for copying to ``/usr/share/redshift-scheduler/rules.conf``
+    - stage ``resources/rules.conf.dist`` (the default config) for copying to ``/usr/share/redshift-scheduler/rules.conf.dist``
 
 Dependencies:
     - `Vala <https://live.gnome.org/Vala>`_
@@ -97,8 +97,8 @@ Usage
 The program is meant to start and run with user privileges.
 You can set it up to start on desktop environment start-up (with ``gnome-session-properties``, ``xfce4-session-settings``, etc.)
 
-On the first time you can run ``redshift-scheduler`` from the command-line.
-During that first start, ``~/config/redshift-scheduler/rules.conf`` will be created, based on the default configuration at ``/usr/share/redshift-scheduler/rules.conf``.
+The first time you can run ``redshift-scheduler`` from the command-line.
+During that first start, ``~/config/redshift-scheduler/rules.conf`` will be created, based on the default configuration at ``/usr/share/redshift-scheduler/rules.conf.dist``.
 
 **redshift-scheduler** runs during the day and controls the screen temperature according to the rules in ``~/config/redshift-scheduler/rules.conf``.
 
