@@ -7,13 +7,13 @@ namespace RedshiftScheduler {
 	class ApplicationConfig {
 
 		public string rules_path;
-		public int temperature_change_interval;
+		public int temperature_change_interval = 1;
 		public bool debug_mode;
 		public bool show_version;
 
 		public ApplicationConfig.from_args(ref unowned string[] args) throws ApplicationConfigError {
 			try {
-				OptionsParser.parse(this, ref args);
+				this.parseArgs(ref args);
 			} catch (OptionError e) {
 				throw new ApplicationConfigError.GENERIC_FAILURE(e.message);
 			}
@@ -27,34 +27,34 @@ namespace RedshiftScheduler {
 			}
 		}
 
-	}
+		private void parseArgs(ref unowned string[] args) throws OptionError {
+			OptionEntry[] options = {
+				OptionEntry() {
+					long_name = "rules-path", short_name = 'r', flags = 0, arg = OptionArg.FILENAME,
+					arg_data = &this.rules_path,
+					description = "Path to rules file", arg_description = "$XDG_CONFIG_HOME/redshift-scheduler/rules.conf"
+				},
+				OptionEntry() {
+					long_name = "temperature-change-interval", short_name = 'i', flags = 0, arg = OptionArg.INT,
+					arg_data = &this.temperature_change_interval,
+					description = "How often and gradually to change the temperature (minutes)", arg_description = "1"
+				},
+				OptionEntry() {
+					long_name = "debug", short_name = 'd', flags = 0, arg = OptionArg.NONE,
+					arg_data = &this.debug_mode,
+					description = "Enable debug mode", arg_description = null
+				},
+				OptionEntry() {
+					long_name = "version", short_name = 'v', flags = 0, arg = OptionArg.NONE,
+					arg_data = &this.show_version,
+					description = "Show version number", arg_description = null
+				}
+			};
 
-	private class OptionsParser {
-
-		private static string rules_path;
-		private static int temperature_change_interval = 1;
-		private static bool debug_mode;
-		private static bool show_version;
-
-		const OptionEntry[] options = {
-			{ "rules-path", 'r', 0, OptionArg.FILENAME, ref rules_path, "Path to rules file", "$XDG_CONFIG_HOME/redshift-scheduler/rules.conf" },
-			{ "temperature-change-interval", 'i', 0, OptionArg.INT64, ref temperature_change_interval, "How often and gradually to change the temperature (minutes)", "1" },
-			{ "debug", 'd', 0, OptionArg.NONE, ref debug_mode, "Enable debug mode", null },
-			{ "version", 'v', 0, OptionArg.NONE, ref show_version, "Show version number", null },
-			{ null }
-		};
-
-		public static void parse(ApplicationConfig config, ref unowned string[] args) throws OptionError {
 			OptionContext opt_context = new OptionContext("- schedule redshift");
-			opt_context.set_help_enabled (true);
-			opt_context.add_main_entries(OptionsParser.options, null);
-
+			opt_context.set_help_enabled(true);
+			opt_context.add_main_entries(options, null);
 			opt_context.parse(ref args);
-
-			config.rules_path = OptionsParser.rules_path;
-			config.temperature_change_interval = OptionsParser.temperature_change_interval;
-			config.debug_mode = OptionsParser.debug_mode;
-			config.show_version = OptionsParser.show_version;
 		}
 
 	}
