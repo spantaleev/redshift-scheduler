@@ -2,7 +2,7 @@ namespace RedshiftScheduler {
 
 	class Application {
 
-		public const string VERSION = "1.0.0";
+		public const string VERSION = "1.0.1";
 
 		private ApplicationConfig config;
 		private ITemperatureDeterminer temperature_determiner;
