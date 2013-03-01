@@ -56,8 +56,6 @@ Therefore, you need **redshift** installed as well.
 Installation
 ------------
 
-**redshift-scheduler** is written in `Vala <https://live.gnome.org/Vala>`_ and compiles to native code.
-
 A package for `ArchLinux <http://archlinux.org>`_ is available `here <https://aur.archlinux.org/packages/redshift-scheduler/>`_.
 Contributions, so that packages for other distros can be made, are always welcome.
 
@@ -66,7 +64,9 @@ Contributions, so that packages for other distros can be made, are always welcom
 Manual Installation
 -------------------
 
-Build from source::
+**redshift-scheduler** is written in `Vala <https://live.gnome.org/Vala>`_ and compiles to native code.
+
+Build from source (requires: ``vala``, ``glib2`` and ``libgee``)::
 
     ./build.sh
 
@@ -74,6 +74,7 @@ The ``redshift-scheduler`` executable would appear in the ``build/`` directory. 
 
 Copy the default rules file ``resources/rules.conf.dist`` into ``~/.config/redshift-scheduler/rules.conf``.
 
+Make sure you have `redshift <http://jonls.dk/redshift/>`_ installed, or **redshift-scheduler** won't work.
 
 
 For distro packagers
@@ -83,6 +84,11 @@ A package would:
     - build the executable and stage it for copying to /usr/bin/ or some other location
     - stage ``resources/rules.conf.dist`` (the default config) for copying to ``/usr/share/redshift-scheduler/rules.conf``
 
+Dependencies:
+    - `Vala <https://live.gnome.org/Vala>`_
+    - glib2
+    - `Libgee <https://live.gnome.org/Libgee>`_
+    - the ``redshift`` binary on the path
 
 
 Usage
