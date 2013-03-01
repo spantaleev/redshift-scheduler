@@ -49,6 +49,14 @@ namespace RedshiftScheduler {
 
 			try {
 				debug("Copying `%s` to `%s`", template_file_path, file.get_path());
+
+				//The target file's directory needs to be created first
+				File directory = file.get_parent();
+				if (!directory.query_exists()) {
+					debug("Creating directory `%s`", directory.get_path());
+					directory.make_directory_with_parents();
+				}
+
 				return template.copy(file, FileCopyFlags.NONE);
 			} catch (Error e) {
 				debug(e.message);
