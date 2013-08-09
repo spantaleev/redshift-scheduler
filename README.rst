@@ -46,7 +46,7 @@ Generally, rules state something like this:
     - from 20:00 to 23:30, I'd like a gradual decrease from 5000K to 4500K
     - etc.
 
-To learn more, see the the sample/default rules file (in the ``resources/`` directory).
+To learn more, see the sample/default rules file (in the ``resources/`` directory).
 
 **redshift-scheduler** calculates the temperature at any given moment of the day and periodically invokes **redshift** to apply it.
 Therefore, you need **redshift** installed as well.
@@ -70,11 +70,12 @@ Build from source (requires: ``vala``, ``glib2`` and ``libgee``)::
 
     ./build.sh
 
-The ``redshift-scheduler`` executable would appear in the ``build/`` directory.  Copy that file anywhere you'd like.
+The ``redshift-scheduler`` executable would appear in the newly created ``build/`` directory.
+Copy the ``redshift-scheduler`` executable file anywhere you'd like.
 
-Copy the default rules file ``resources/rules.conf.dist`` into ``~/.config/redshift-scheduler/rules.conf``.
+Copy the default rules file (``resources/rules.conf.dist``) to ``~/.config/redshift-scheduler/rules.conf``.
 
-Make sure you have `redshift <http://jonls.dk/redshift/>`_ installed, or **redshift-scheduler** won't work.
+Make sure you have `redshift <http://jonls.dk/redshift/>`_ installed, as **redshift-scheduler** depends on it.
 
 
 For distro packagers
@@ -89,6 +90,7 @@ Dependencies:
     - glib2
     - `Libgee <https://live.gnome.org/Libgee>`_
     - the ``redshift`` binary on the path
+
 
 
 Usage

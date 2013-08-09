@@ -2,7 +2,7 @@ namespace RedshiftScheduler {
 
 	/**
 	 * Restores the temperature when the program exits.
-
+	 *
 	 * We need to use static methods/variables, because Posix
 	 * signal handler functions are "without a target" and
 	 * therefore cannot be used as a closure or refer to an instance member.
