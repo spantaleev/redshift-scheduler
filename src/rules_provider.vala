@@ -141,7 +141,7 @@ namespace RedshiftScheduler {
 				lock(this.rules) {
 					this.rules = this.provider.get_rules();
 					this.rules_loaded = true;
-					message("Rules initially loaded");
+					debug("Rules initially loaded");
 					dump_rules(this.rules);
 				}
 			}

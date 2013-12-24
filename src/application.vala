@@ -48,12 +48,12 @@ namespace RedshiftScheduler {
 				int temperature = this.temperature_determiner.determine_temperature();
 
 				if (this.last_temperature_set != temperature) {
-					message("Temperature determined to be: %dK", temperature);
+					debug("Temperature determined to be: %dK", temperature);
 					this.temperature_setter.set_temperature(temperature);
 					this.last_temperature_set = temperature;
-					message("Temperature set to: %dK", temperature);
+					debug("Temperature set to: %dK", temperature);
 				} else {
-					message("Temperature remains the same as last time (%dK) - not doing anything", temperature);
+					debug("Temperature remains the same as last time (%dK) - not doing anything", temperature);
 				}
 			} catch (TemperatureDeterminerError e) {
 				stderr.printf(e.message);

@@ -38,15 +38,15 @@ namespace RedshiftScheduler {
 				throw new TemperatureDeterminerError.GENERIC_FAILURE("Cannot load rules: %s", e.message);
 			}
 
-			message("Looking for a rule applying at: %s", time.to_string());
+			debug("Looking for a rule applying at: %s", time.to_string());
 
 			Rule? active_rule = this.determine_active_rule(rules, time);
 			if (active_rule == null) {
-				message("No rule found. Using maximum temperature (%dK)", TEMPERATURE_MAX);
+				debug("No rule found. Using maximum temperature (%dK)", TEMPERATURE_MAX);
 				return TEMPERATURE_MAX;
 			}
 
-			message("Using rule %s", active_rule.to_string());
+			debug("Using rule %s", active_rule.to_string());
 
 			if (!active_rule.transient) {
 				//The current period is not transient, meaning the temperature is constant
