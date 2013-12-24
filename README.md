@@ -1,7 +1,6 @@
-Redshift Scheduler
-==================
+# Redshift Scheduler
 
-**redshift-scheduler**, as the name implies is a scheduler program for `redshift <http://jonls.dk/redshift/>`_.
+**redshift-scheduler**, as the name implies is a scheduler program for [redshift](http://jonls.dk/redshift/).
 
 Redshift adjusts the color temperature of your screen according to your surroundings (meaning according to the time of day and your location).
 This may help your eyes hurt less if you are working in front of the screen at night.
@@ -9,18 +8,21 @@ This may help your eyes hurt less if you are working in front of the screen at n
 However, not everyone has the same day-schedule and likes their screen "turning red" at ~17:00 in the afternoon.
 
 
+--------------------
 
-What does it do?
-----------------
 
-Read the description over at `redshift's page <http://jonls.dk/redshift/>`_ for an introduction to the general idea of "screen temperature changing".
+## What does it do?
+
+Read the description over at [redshift's page](http://jonls.dk/redshift/) for an introduction to the general idea of "screen temperature changing".
 
 You can then determine whether **redshift** is good enough for you, or you need the advanced control that **redshift-scheduler** offers.
 
 
+--------------------
 
-What problems with redshift does this fix?
-------------------------------------------
+
+
+## What problems with redshift does this fix?
 
 **redshift-scheduler** addresses the following problems with the way **redshift** works:
 
@@ -33,18 +35,21 @@ What problems with redshift does this fix?
     - **redshift-scheduler**'s temperature transitions can be very gradual (invisible to the user)
 
 
+--------------------
 
-How does it work?
------------------
+
+
+## How does it work?
 
 **redshift-scheduler** uses a configuration file that specifies a number of rules.
 Rules define time periods within the day and their corresponding temperature (or temperature transition).
 
 Generally, rules state something like this:
-    - from 11:00 to 18:00, I'd like the maximum screen temperature (6500K)
-    - from 18:00 to 20:00, I'd like a gradual decrease from 6500K to 5000K
-    - from 20:00 to 23:30, I'd like a gradual decrease from 5000K to 4500K
-    - etc.
+
+ - from 11:00 to 18:00, I'd like the maximum screen temperature (6500K)
+ - from 18:00 to 20:00, I'd like a gradual decrease from 6500K to 5000K
+ - from 20:00 to 23:30, I'd like a gradual decrease from 5000K to 4500K
+ - etc.
 
 To learn more, see the sample/default rules file (in the ``resources/`` directory).
 
@@ -52,21 +57,22 @@ To learn more, see the sample/default rules file (in the ``resources/`` director
 Therefore, you need **redshift** installed as well.
 
 
+--------------------
 
-Installation
-------------
 
-A package for `ArchLinux <http://archlinux.org>`_ is available `here <https://aur.archlinux.org/packages/redshift-scheduler/>`_.
+## Installation
+
+### Packages
+
+A package for [ArchLinux](http://archlinux.org/) is available [here](https://aur.archlinux.org/packages/redshift-scheduler/).
 Contributions, so that packages for other distros can be made, are always welcome.
 
 
+### Manual Installation
 
-Manual Installation
--------------------
+**redshift-scheduler** is written in [Vala](https://live.gnome.org/Vala) and compiles to native code.
 
-**redshift-scheduler** is written in `Vala <https://live.gnome.org/Vala>`_ and compiles to native code.
-
-Build from source (requires: ``vala``, ``glib2`` and ``libgee``)::
+Build from source (requires: ``vala``, ``glib2`` and ``libgee``):
 
     ./build.sh
 
@@ -75,26 +81,28 @@ Copy the ``redshift-scheduler`` executable file anywhere you'd like.
 
 Copy the default rules file (``resources/rules.conf.dist``) to ``~/.config/redshift-scheduler/rules.conf``.
 
-Make sure you have `redshift <http://jonls.dk/redshift/>`_ installed, as **redshift-scheduler** depends on it.
+Make sure you have [redshift](http://jonls.dk/redshift/) installed, as **redshift-scheduler** depends on it.
 
 
-For distro packagers
---------------------
+### For distro packagers
 
 A package would:
-    - build the executable and stage it for copying to /usr/bin/ or some other location
-    - stage ``resources/rules.conf.dist`` (the default config) for copying to ``/usr/share/redshift-scheduler/rules.conf.dist``
+
+ - build the executable and stage it for copying to ``/usr/bin/`` or some other such location
+ - stage ``resources/rules.conf.dist`` (the default config) for copying to ``/usr/share/redshift-scheduler/rules.conf.dist``
 
 Dependencies:
-    - `Vala <https://live.gnome.org/Vala>`_
-    - glib2
-    - `Libgee <https://live.gnome.org/Libgee>`_
-    - the ``redshift`` binary on the path
+
+ - [Vala](https://live.gnome.org/Vala)
+ - glib2
+ - [Libgee](https://live.gnome.org/Libgee)
+ - the ``redshift`` binary on the path
 
 
+--------------------
 
-Usage
------
+
+## Usage
 
 The program is meant to start and run with user privileges.
 You can set it up to start on desktop environment start-up (with ``gnome-session-properties``, ``xfce4-session-settings``, etc.)
@@ -108,8 +116,7 @@ Rules can be customized to your liking. Rule changes take effect immediately (wi
 
 
 
-Ideas/future developments
--------------------------
+## Ideas/future developments
 
 - The ability to temporarily disable temperature changes ("stop for 1 hour", etc.)
 
