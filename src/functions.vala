@@ -40,7 +40,7 @@ namespace RedshiftScheduler {
 		foreach (string data_path in data_dirs) {
 			string template_file_path = Path.build_path("/", data_path, "/redshift-scheduler/", template_file_name);
 
-			debug("Looking for file: %s", template_file_path);
+			message("Looking for config template file: %s", template_file_path);
 
 			File template = File.new_for_path(template_file_path);
 			if (!template.query_exists()) {
