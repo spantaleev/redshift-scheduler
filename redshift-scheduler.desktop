@@ -1,0 +1,8 @@
+[Desktop Entry]
+Icon=redshift
+Name=Redshift Scheduler
+Comment=Adjusts screen color temperature according to time of the day and location
+Exec=redshift-scheduler
+Terminal=false
+Type=Application
+X-GNOME-Autostart-Enabled=true
