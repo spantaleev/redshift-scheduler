@@ -81,6 +81,9 @@ Copy the ``redshift-scheduler`` executable file anywhere you'd like.
 
 Copy the default rules file (``resources/rules.conf.dist``) to ``~/.config/redshift-scheduler/rules.conf``.
 
+Copy the desktop file (``resources/redshift-scheduler.desktop``) to ``~/.local/share/applications/``.
+This will allow to add the tool as a startup item using e.g. the [GNOME Tweak Tool](https://wiki.gnome.org/Apps/GnomeTweakTool)
+
 Make sure you have [redshift](http://jonls.dk/redshift/) installed, as **redshift-scheduler** depends on it.
 
 
@@ -90,6 +93,7 @@ A package would:
 
  - build the executable and stage it for copying to ``/usr/bin/`` or some other such location
  - stage ``resources/rules.conf.dist`` (the default config) for copying to ``/usr/share/redshift-scheduler/rules.conf.dist``
+ - stage ``resources/redshift-scheduler.desktop`` (the desktop file) for copying to ``/usr/share/applications/``
 
 Dependencies:
 

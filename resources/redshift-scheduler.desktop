@@ -5,4 +5,4 @@ Comment=Adjusts screen color temperature according to time of the day and locati
 Exec=redshift-scheduler
 Terminal=false
 Type=Application
-X-GNOME-Autostart-Enabled=true
+Category=Utility;
