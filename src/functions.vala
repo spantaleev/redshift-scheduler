@@ -66,5 +66,4 @@ namespace RedshiftScheduler {
 		return false;
 	}
 
-
 }
