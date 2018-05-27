@@ -14,7 +14,7 @@ namespace RedshiftScheduler {
 		public static void setup(ITemperatureSetter setter) {
 			EnvironmentRestorer.setter = setter;
 
-			int[] signals = {Posix.SIGHUP, Posix.SIGINT, Posix.SIGTERM};
+			int[] signals = {Posix.Signal.HUP, Posix.Signal.INT, Posix.Signal.TERM};
 			foreach (int signum in signals) {
 				Posix.signal(signum, () => {
 					EnvironmentRestorer.restore_temperature_and_exit();
