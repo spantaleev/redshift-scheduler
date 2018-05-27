@@ -3,7 +3,7 @@ namespace RedshiftScheduler {
 	class TestRedshiftVersionDetection : TestCase {
 
 		public TestRedshiftVersionDetection() {
-			base("Rule");
+			base("RedshiftVersionDetection");
 			this.add_test("test_version_detection", this.test_version_detection);
 			this.add_test("test_version_detection_faults", this.test_version_detection_faults);
 		}
