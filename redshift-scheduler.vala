@@ -31,6 +31,19 @@ namespace RedshiftScheduler {
 		IRulesProvider rules_provider = new LiveFileRulesProvider(new FileRulesProvider(rules_file));
 		ITemperatureDeterminer temperature_determiner = new RulesBasedTemperatureDeterminer(rules_provider);
 
+		// Run this early, before we set up `EnvironmentRestorer` or other such things having side-effects.
+		// In print mode, we'd like to print and exit without changing anything at all.
+		if (config.print_mode) {
+			try {
+				int temperature = temperature_determiner.determine_temperature();
+				stdout.printf("%dK", temperature);
+			} catch (TemperatureDeterminerError e) {
+				stderr.printf(e.message);
+				return 1;
+			}
+			return 0;
+		}
+
 		ITemperatureSetter temperature_setter = new RedshiftTemperatureSetter();
 
 		EnvironmentRestorer.setup(temperature_setter);

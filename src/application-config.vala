@@ -9,6 +9,7 @@ namespace RedshiftScheduler {
 		public string rules_path;
 		public int temperature_change_interval = 1;
 		public bool debug_mode;
+		public bool print_mode;
 		public bool show_version;
 
 		public ApplicationConfig.from_args(ref unowned string[] args) throws ApplicationConfigError {
@@ -43,6 +44,11 @@ namespace RedshiftScheduler {
 					long_name = "debug", short_name = 'd', flags = 0, arg = OptionArg.NONE,
 					arg_data = &this.debug_mode,
 					description = "Enable debug mode", arg_description = null
+				},
+				OptionEntry() {
+					long_name = "print", short_name = 'p', flags = 0, arg = OptionArg.NONE,
+					arg_data = &this.print_mode,
+					description = "Print temperature that would be in effect now according to current rules", arg_description = null
 				},
 				OptionEntry() {
 					long_name = "version", short_name = 'v', flags = 0, arg = OptionArg.NONE,
