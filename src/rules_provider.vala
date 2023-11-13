@@ -138,11 +138,16 @@ namespace RedshiftScheduler {
 
 		public Rule[] get_rules() throws RulesError {
 			if (! this.rules_loaded) {
-				lock(this.rules) {
-					this.rules = this.provider.get_rules();
-					this.rules_loaded = true;
-					debug("Rules initially loaded");
-					dump_rules(this.rules);
+				try {
+					lock(this.rules) {
+						this.rules = this.provider.get_rules();
+						this.rules_loaded = true;
+						debug("Rules initially loaded");
+						dump_rules(this.rules);
+					}
+				} catch (GLib.Error e) {
+					warning("Failed while locking: %s", e.message);
+					throw new RulesError.GENERIC_FAILURE(e.message);
 				}
 			}
 			return this.rules;
